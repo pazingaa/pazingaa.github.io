@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-02-05T15:46:51.000Z</updated>
+  <updated>2017-09-09T17:33:39.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,129 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaScript实现私有变量</title>
+    <link href="http://yoursite.com/2017/04/18/js-oop-private-member/"/>
+    <id>http://yoursite.com/2017/04/18/js-oop-private-member/</id>
+    <published>2017-04-18T14:15:59.000Z</published>
+    <updated>2017-09-09T17:33:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><em>ES6之前</em></p>
+<hr>
+<p>构造函数Person和它的私有方法们：</p>
+<pre><code>function Person(name, age){
+    // 私有变量
+    this.name = name;
+    this.age = age;
+    function privateName(){
+    // 在constructor中函数声明，实现Person的第1个私有方法
+        console.log(&quot;Name is: &quot;+this.name);
+        return this.name;
+    };
+    var privateAge = function(){
+    // 在constructor中定义函数表达式，实现Person的第2个私有方法
+        console.log(&quot;Age is: &quot;+this.age);
+        return this.age;
+    };
+    this.publicFunc = function(){
+        // 需要绑定正确的this作用域，我们使用call方法调用
+        privateName.call(this);  
+        privateAge.call(this);
+    }
+
+};
+var Peter = new Person(&quot;Peter&quot;, 24);
+Peter.privateAge();  // undefined 验证了私有方法不可访问
+Peter.publicFunc();  // console will print name and age 公有方法访问成功
+</code></pre><p>######不足之处：</p>
+<ol>
+<li>内存消耗，每次new操作都会，每个函数都会有一笔新的开销。</li>
+<li>私有方法并不存在于原型链上，因此prototype的方法不能访问该方法。</li>
+</ol>
+<hr>
+<p>构造函数Person和它的私有方法们 (by Module Pattern)：</p>
+<pre><code>var PersonMP = (function(name, age){
+    this.name = name;
+    this.age = age;
+    function privateName(){
+        return this.name;
+    };
+    function privateAge(){
+        return this.age;
+    }
+    return {
+        publicFunc : function(){
+            privateName.call(this);
+            privateAge.call(this);
+        }
+    }
+})();
+</code></pre><p>######不足之处：</p>
+<ol>
+<li>如果切换变量或方法的public/private状态，必须要去每个相关地方手动修改。</li>
+<li>debug时，对于私有变量较难侦测，且私有变量难以扩充，灵活度不够。</li>
+</ol>
+<hr>
+<p>小结：</p>
+<p>利用闭包特性，retrun一个对象字面量，其中裹挟public method以达到提供外界API的目的。此中还是用到了IIFE立即执行函数相关知识。当然，仍有一些改进空间：</p>
+<ol>
+<li><p>譬如每次都要用到call俩切换scope，可以封装一个方法，一劳永逸。</p>
+<p>//返回一个函数，该函数的this绑定到当前对象<br>_:function(fun){<br>   var that = this;<br>   return function(){</p>
+<pre><code>return fun.apply(that,arguments); // 注意return
+</code></pre><p>   }<br>}</p>
+<p>2.将方法绑到constructor的原型链上，可以达到共享的目的，即讲Model Pattern中的IIFE定义给Person.prototype即可：</p>
+<p>function Person(name,age){<br>   this.name = name;<br>   this.age = age;<br>}<br>Person.prototype = (function(){<br>   function privateName(){</p>
+<pre><code>return this.name;
+</code></pre><p>   };<br>   function privateAge(){</p>
+<pre><code>return this.age;
+</code></pre><p>   }<br>   return {</p>
+<pre><code>constructor : Person, // 注意定义好constructor指向， 对象字面量会覆盖原prototype
+publicFunc : function(){
+    this._(privateName);
+    this._(privateAge);
+}，
+_ : function(fun){
+    var that = this;
+    return function(){
+        return fun.apply(that, arguments); // 注意return
+    }
+}
+</code></pre><p>})();</p>
+</li>
+</ol>
+<hr>
+<p><em>ES6之前后</em></p>
+<hr>
+<p>我们有class。</p>
+<ol>
+<li><p>静态变量</p>
+<p>// ES6 的类定义实现了静态方法的定义，但静态变量呢？<br>// 可以用如下方式实现:<br>class Person{<br>  static get name(){</p>
+<pre><code>return &apos;jelly&apos;;
+</code></pre><p>  }<br>};<br>Person.name;  // </p>
+</li>
+<li><p>私有属性（私有属性有多种实现方式，只谈及其中一种）<br>// 闭包<br>const TbFedMembers = (() =&gt; {<br>const HuaChen = ‘jelly’;</p>
+<p>return class{<br>getOneMemberName(){<br> return HuaChen;<br>}<br>};<br>})();</p>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;em&gt;ES6之前&lt;/em&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;构造函数Person和它的私有方法们：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function Person(name, age){
+    // 私有变量
+    this.name = name;
+    this.age 
+    
+    </summary>
+    
+      <category term="JavaScript   //在此处输入这篇文章的分类。" scheme="http://yoursite.com/categories/JavaScript-%E5%9C%A8%E6%AD%A4%E5%A4%84%E8%BE%93%E5%85%A5%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E7%9A%84%E5%88%86%E7%B1%BB%E3%80%82/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

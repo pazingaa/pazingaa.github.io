@@ -18,7 +18,7 @@
 
   <!--Open Graph Title-->
   
-      <meta property="og:title" content="Hello World"/>
+      <meta property="og:title" content="JavaScript实现私有变量"/>
   
   <!--Open Graph Description-->
   
@@ -37,7 +37,7 @@
 
   <!-- Title -->
   
-  <title>Hello World - pazingaa</title>
+  <title>JavaScript实现私有变量 - pazingaa</title>
 
 
   <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
@@ -117,11 +117,11 @@
         <!-- Title date & tags -->
         <div class="post-header">
           <h1 class="entry-title">
-            Hello World
+            JavaScript实现私有变量
             
           </h1>
           <p class="posted-on">
-          2017 - 02 - 05
+          2017 - 04 - 18
           </p>
           <div class="tags-links">
             
@@ -131,15 +131,103 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+          <p><em>ES6之前</em></p>
+<hr>
+<p>构造函数Person和它的私有方法们：</p>
+<pre><code>function Person(name, age){
+    // 私有变量
+    this.name = name;
+    this.age = age;
+    function privateName(){
+    // 在constructor中函数声明，实现Person的第1个私有方法
+        console.log(&quot;Name is: &quot;+this.name);
+        return this.name;
+    };
+    var privateAge = function(){
+    // 在constructor中定义函数表达式，实现Person的第2个私有方法
+        console.log(&quot;Age is: &quot;+this.age);
+        return this.age;
+    };
+    this.publicFunc = function(){
+        // 需要绑定正确的this作用域，我们使用call方法调用
+        privateName.call(this);  
+        privateAge.call(this);
+    }
+
+};
+var Peter = new Person(&quot;Peter&quot;, 24);
+Peter.privateAge();  // undefined 验证了私有方法不可访问
+Peter.publicFunc();  // console will print name and age 公有方法访问成功
+</code></pre><p>######不足之处：</p>
+<ol>
+<li>内存消耗，每次new操作都会，每个函数都会有一笔新的开销。</li>
+<li>私有方法并不存在于原型链上，因此prototype的方法不能访问该方法。</li>
+</ol>
+<hr>
+<p>构造函数Person和它的私有方法们 (by Module Pattern)：</p>
+<pre><code>var PersonMP = (function(name, age){
+    this.name = name;
+    this.age = age;
+    function privateName(){
+        return this.name;
+    };
+    function privateAge(){
+        return this.age;
+    }
+    return {
+        publicFunc : function(){
+            privateName.call(this);
+            privateAge.call(this);
+        }
+    }
+})();
+</code></pre><p>######不足之处：</p>
+<ol>
+<li>如果切换变量或方法的public/private状态，必须要去每个相关地方手动修改。</li>
+<li>debug时，对于私有变量较难侦测，且私有变量难以扩充，灵活度不够。</li>
+</ol>
+<hr>
+<p>小结：</p>
+<p>利用闭包特性，retrun一个对象字面量，其中裹挟public method以达到提供外界API的目的。此中还是用到了IIFE立即执行函数相关知识。当然，仍有一些改进空间：</p>
+<ol>
+<li><p>譬如每次都要用到call俩切换scope，可以封装一个方法，一劳永逸。</p>
+<p>//返回一个函数，该函数的this绑定到当前对象<br>_:function(fun){<br>   var that = this;<br>   return function(){</p>
+<pre><code>return fun.apply(that,arguments); // 注意return
+</code></pre><p>   }<br>}</p>
+<p>2.将方法绑到constructor的原型链上，可以达到共享的目的，即讲Model Pattern中的IIFE定义给Person.prototype即可：</p>
+<p>function Person(name,age){<br>   this.name = name;<br>   this.age = age;<br>}<br>Person.prototype = (function(){<br>   function privateName(){</p>
+<pre><code>return this.name;
+</code></pre><p>   };<br>   function privateAge(){</p>
+<pre><code>return this.age;
+</code></pre><p>   }<br>   return {</p>
+<pre><code>constructor : Person, // 注意定义好constructor指向， 对象字面量会覆盖原prototype
+publicFunc : function(){
+    this._(privateName);
+    this._(privateAge);
+}，
+_ : function(fun){
+    var that = this;
+    return function(){
+        return fun.apply(that, arguments); // 注意return
+    }
+}
+</code></pre><p>})();</p>
+</li>
+</ol>
+<hr>
+<p><em>ES6之前后</em></p>
+<hr>
+<p>我们有class。</p>
+<ol>
+<li><p>静态变量</p>
+<p>// ES6 的类定义实现了静态方法的定义，但静态变量呢？<br>// 可以用如下方式实现:<br>class Person{<br>  static get name(){</p>
+<pre><code>return &apos;jelly&apos;;
+</code></pre><p>  }<br>};<br>Person.name;  // </p>
+</li>
+<li><p>私有属性（私有属性有多种实现方式，只谈及其中一种）<br>// 闭包<br>const TbFedMembers = (() =&gt; {<br>const HuaChen = ‘jelly’;</p>
+<p>return class{<br>getOneMemberName(){<br> return HuaChen;<br>}<br>};<br>})();</p>
+</li>
+</ol>
 
         </div>
       </article>
@@ -158,10 +246,10 @@
     <!-- Pre or Next -->
     <div class="nav-links">
       
-        <div class="nav-previous">
-          <a href="/2017/04/18/js-oop-private-member/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> Older Posts</a>
-        </div>
       
+        <div class="nav-next">
+          <a href="/2017/02/05/hello-world/" rel="prev">Newer Posts <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
       
     </div>
 
