@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: pazingaa
 subtitle:
-description:
+description: Words change my life.
 author: John Doe
 language:
 timezone:
@@ -52,7 +52,7 @@ tag_map:
 ## Hexo uses Moment.js to parse and display date
 ## You can customize the date format as defined in
 ## http://momentjs.com/docs/#/displaying/format/
-date_format: YYYY-MM-DD
+date_format: YYYY - MM - DD
 time_format: HH:mm:ss
 
 # Pagination
@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: beautiful-hexo
+theme: material
 exclude_generator:
 Plugins:
 - hexo-generator-feed
@@ -79,14 +79,13 @@ archive_generator:
 sitemap:
   path: sitemap.xml
 
-#Feed Atom
+# Feed Atom
 feed:
   type: atom
   path: atom.xml
   limit: 20
 
 # Markdown
-## https://github.com/chjj/marked
 markdown:
   gfm: true
   pedantic: false
@@ -99,6 +98,18 @@ markdown:
 # Stylus
 stylus:
   compress: true
+
+# Default post title
+default_post_title: Halo
+
+# Comment 
+# 填写 disqus_shortname 即可使用 disqus
+comments:
+  disqus_shortname: 
+
+# Google Analytics Tracking ID
+google_analytics: 
+
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
