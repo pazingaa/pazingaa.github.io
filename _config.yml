@@ -100,7 +100,7 @@ stylus:
   compress: true
 
 # Default post title
-default_post_title: Halo
+default_post_title:
 
 # Comment 
 # 填写 disqus_shortname 即可使用 disqus
