@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: pazingaa
-subtitle:
-description: Words change my life.
-author: John Doe
-language:
+title: Life in pieces.
+subtitle: 
+description: Web, 分享.
+author: pazingaa
+language: zh-CN
 timezone:
 
 # URL
@@ -38,9 +38,9 @@ post_asset_folder: false
 relative_link: false
 future: true
 highlight:
-  enable: true
+  enable: false
   line_number: true
-  auto_detect: false
+  auto_detect: true
   tab_replace:
 
 # Category & Tag
@@ -117,3 +117,5 @@ deploy:
   type: git
   repo: https://github.com/pazingaa/pazingaa.github.io.git
   branch: master
+
+

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>pazingaa</title>
+  <title>Life in pieces.</title>
   
   <link href="/atom.xml" rel="self"/>
   
@@ -9,7 +9,7 @@
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>pazingaa</name>
     
   </author>
   
@@ -83,25 +83,25 @@ Peter.publicFunc();  // console will print name and age 公有方法访问成功
 <ol>
 <li><p>譬如每次都要用到call俩切换scope，可以封装一个方法，一劳永逸。</p>
 <p>//返回一个函数，该函数的this绑定到当前对象<br>_:function(fun){<br>   var that = this;<br>   return function(){</p>
-<pre><code>return fun.apply(that,arguments); // 注意return
+<pre><code>   return fun.apply(that,arguments); // 注意return
 </code></pre><p>   }<br>}</p>
 <p>2.将方法绑到constructor的原型链上，可以达到共享的目的，即讲Model Pattern中的IIFE定义给Person.prototype即可：</p>
 <p>function Person(name,age){<br>   this.name = name;<br>   this.age = age;<br>}<br>Person.prototype = (function(){<br>   function privateName(){</p>
-<pre><code>return this.name;
+<pre><code>   return this.name;
 </code></pre><p>   };<br>   function privateAge(){</p>
-<pre><code>return this.age;
+<pre><code>   return this.age;
 </code></pre><p>   }<br>   return {</p>
-<pre><code>constructor : Person, // 注意定义好constructor指向， 对象字面量会覆盖原prototype
-publicFunc : function(){
-    this._(privateName);
-    this._(privateAge);
-}，
-_ : function(fun){
-    var that = this;
-    return function(){
-        return fun.apply(that, arguments); // 注意return
-    }
-}
+<pre><code>   constructor : Person, // 注意定义好constructor指向， 对象字面量会覆盖原prototype
+   publicFunc : function(){
+       this._(privateName);
+       this._(privateAge);
+   }，
+   _ : function(fun){
+       var that = this;
+       return function(){
+           return fun.apply(that, arguments); // 注意return
+       }
+   }
 </code></pre><p>})();</p>
 </li>
 </ol>
@@ -112,7 +112,7 @@ _ : function(fun){
 <ol>
 <li><p>静态变量</p>
 <p>// ES6 的类定义实现了静态方法的定义，但静态变量呢？<br>// 可以用如下方式实现:<br>class Person{<br>  static get name(){</p>
-<pre><code>return &apos;jelly&apos;;
+<pre><code>return &#39;jelly&#39;;
 </code></pre><p>  }<br>};<br>Person.name;  // </p>
 </li>
 <li><p>私有属性（私有属性有多种实现方式，只谈及其中一种）<br>// 闭包<br>const TbFedMembers = (() =&gt; {<br>const HuaChen = ‘jelly’;</p>
@@ -146,13 +146,17 @@ _ : function(fun){
     <updated>2017-02-05T15:46:51.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy
+</code></pre>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 ]]></content>
     
